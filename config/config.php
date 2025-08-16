@@ -12,7 +12,10 @@ if (session_status() === PHP_SESSION_NONE) {
 // Timezone
 date_default_timezone_set('America/Sao_Paulo');
 
-// Configurações de erro
+// IMPORTANTE: Carregar arquivo de banco de dados PRIMEIRO (define ENVIRONMENT)
+require_once __DIR__ . '/database.php';
+
+// Configurações de erro (agora ENVIRONMENT já está definido)
 if (ENVIRONMENT === 'local') {
     error_reporting(E_ALL);
     ini_set('display_errors', 1);
@@ -69,9 +72,6 @@ define('ITEMS_PER_PAGE', 20);
 define('LOG_LEVEL', 'DEBUG'); // DEBUG, INFO, WARNING, ERROR, CRITICAL
 define('LOG_ROTATION', 'daily'); // daily, weekly, monthly
 
-// Carregar arquivo de banco de dados
-require_once CONFIG_PATH . '/database.php';
-
 // Autoload de classes
 spl_autoload_register(function ($class) {
     $file = SRC_PATH . '/' . str_replace('\\', '/', $class) . '.php';
@@ -92,5 +92,11 @@ function dd($data, $die = true) {
 function logMessage($message, $level = 'INFO', $file = 'system.log') {
     $date = date('Y-m-d H:i:s');
     $log = "[$date] [$level] $message" . PHP_EOL;
+    
+    // Criar pasta de logs se não existir
+    if (!is_dir(LOG_PATH)) {
+        mkdir(LOG_PATH, 0755, true);
+    }
+    
     file_put_contents(LOG_PATH . '/' . $file, $log, FILE_APPEND);
 }

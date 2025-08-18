@@ -23,7 +23,7 @@ class AuthController extends BaseController {
     public function showLoginForm() {
         // Se já estiver logado, redireciona para o dashboard
         if (Session::isLoggedIn()) {
-            header('Location: /dashboard.php');
+            header('Location: dashboard.php');
             exit();
         }
         $this->render('auth/login', ['title' => 'Login']);
@@ -34,32 +34,45 @@ class AuthController extends BaseController {
      */
     public function login() {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            header('Location: /login.php');
+            header('Location: login.php');
             exit();
         }
 
         // Validação básica
-        $username = $_POST['usuario'] ?? '';
+        $username = trim($_POST['usuario'] ?? '');
         $password = $_POST['senha'] ?? '';
 
         if (empty($username) || empty($password)) {
             Session::setFlash('error', 'Usuário e senha são obrigatórios.');
-            header('Location: /login.php');
+            header('Location: login.php');
             exit();
         }
 
-        // Autenticar
-        $userData = $this->userModel->authenticate($username, $password);
+        try {
+            // Autenticar
+            $userData = $this->userModel->authenticate($username, $password);
 
-        if ($userData) {
-            // Sucesso
-            Session::login($userData);
-            header('Location: /dashboard.php');
-            exit();
-        } else {
-            // Falha
-            Session::setFlash('error', 'Credenciais inválidas. Tente novamente.');
-            header('Location: /login.php');
+            if ($userData) {
+                // Sucesso - registrar log
+                logMessage("Login realizado com sucesso: {$userData['usuario']}", 'INFO', 'auth.log');
+                
+                Session::login($userData);
+                header('Location: dashboard.php');
+                exit();
+            } else {
+                // Falha - registrar tentativa
+                logMessage("Tentativa de login falhada: {$username}", 'WARNING', 'auth.log');
+                
+                Session::setFlash('error', 'Credenciais inválidas. Tente novamente.');
+                header('Location: login.php');
+                exit();
+            }
+        } catch (Exception $e) {
+            // Erro no sistema
+            logMessage("Erro no login: " . $e->getMessage(), 'ERROR', 'auth.log');
+            
+            Session::setFlash('error', 'Erro interno do sistema. Tente novamente.');
+            header('Location: login.php');
             exit();
         }
     }
@@ -68,9 +81,28 @@ class AuthController extends BaseController {
      * Realiza o logout do usuário.
      */
     public function logout() {
+        $userName = Session::getUserName();
+        
         Session::logout();
         Session::setFlash('success', 'Você foi desconectado com sucesso.');
-        header('Location: /login.php');
+        
+        // Registrar logout
+        logMessage("Logout realizado: {$userName}", 'INFO', 'auth.log');
+        
+        header('Location: login.php');
         exit();
     }
+}
+
+// Função para logs
+function logMessage($message, $level = 'INFO', $file = 'system.log') {
+    $date = date('Y-m-d H:i:s');
+    $log = "[$date] [$level] $message" . PHP_EOL;
+    
+    // Criar pasta de logs se não existir
+    if (!is_dir(LOG_PATH)) {
+        mkdir(LOG_PATH, 0755, true);
+    }
+    
+    file_put_contents(LOG_PATH . '/' . $file, $log, FILE_APPEND);
 }

@@ -34,12 +34,23 @@ define('LOG_PATH', ROOT_PATH . '/logs');
 define('TEMP_PATH', ROOT_PATH . '/temp');
 define('UPLOAD_PATH', PUBLIC_PATH . '/uploads');
 
-// URLs do sistema
+// URLs do sistema - Corrigido para funcionar corretamente
 $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http';
 $host = $_SERVER['HTTP_HOST'];
-$base_url = $protocol . '://' . $host;
 
-define('BASE_URL', $base_url);
+// Detectar se estamos na pasta public ou na raiz do projeto
+$scriptName = $_SERVER['SCRIPT_NAME'];
+$basePath = '';
+
+if (strpos($scriptName, '/public/') !== false) {
+    // Estamos na pasta public, então o base path é até public
+    $basePath = dirname($scriptName);
+} else {
+    // Estamos na raiz, então precisamos adicionar /public
+    $basePath = rtrim(dirname($scriptName), '/') . '/public';
+}
+
+define('BASE_URL', $protocol . '://' . $host . $basePath);
 define('ASSETS_URL', BASE_URL . '/assets');
 define('CSS_URL', ASSETS_URL . '/css');
 define('JS_URL', ASSETS_URL . '/js');
@@ -80,12 +91,14 @@ spl_autoload_register(function ($class) {
     }
 });
 
-// Função auxiliar para debug
-function dd($data, $die = true) {
-    echo '<pre>';
-    var_dump($data);
-    echo '</pre>';
-    if ($die) die();
+// Função auxiliar para debug (verificar se já não foi declarada)
+if (!function_exists('dd')) {
+    function dd($data, $die = true) {
+        echo '<pre>';
+        var_dump($data);
+        echo '</pre>';
+        if ($die) die();
+    }
 }
 
 // Função para logs

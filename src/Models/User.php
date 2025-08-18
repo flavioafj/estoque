@@ -30,7 +30,8 @@ class User extends BaseModel {
                 AND u.ativo = 1";
         
         $user = $this->db->queryOne($sql, [':username' => $username]);
-        
+
+                
         if (!$user) {
             return false;
         }

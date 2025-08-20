@@ -177,4 +177,7 @@ echo "<li>Execute o arquivo completo <code>database_schema.sql</code> para criar
 echo "</ol>";
 
 echo "<br><p><a href='db_debug.php'>Executar debug completo do banco</a></p>";
+
+
+var_dump($userModel->debugAdmin());
 ?>

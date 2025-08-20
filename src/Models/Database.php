@@ -137,14 +137,22 @@ class Database {
     public function queryOne($sql, $params = []) {
         $this->prepare($sql);
         
+        if ($this->statement === null || $this->statement === false) {
+            $this->logError("Falha ao preparar query: $sql");
+            return null;
+        }
+        
         if (!empty($params)) {
             foreach ($params as $key => $value) {
                 $this->bind($key, $value);
             }
         }
         
-        $this->execute();
-        return $this->fetch();
+        if ($this->execute()) {
+            return $this->fetch();
+        }
+        
+        return null;
     }
     
     // Inserir registro

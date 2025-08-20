@@ -1,6 +1,6 @@
 <?php
 /**
- * Classe User - Modelo de Usuário
+ * Classe User - Modelo de Usuário (CORRIGIDA)
  * src/Models/User.php
  */
 
@@ -20,24 +20,36 @@ class User extends BaseModel {
         'token_expiracao'
     ];
     
-    // Autenticar usuário
+    // Autenticar usuário - MÉTODO CORRIGIDO
     public function authenticate($username, $password) {
         // Buscar usuário
         $sql = "SELECT u.*, p.nome as perfil_nome 
                 FROM {$this->table} u 
                 JOIN perfis p ON u.perfil_id = p.id 
-                WHERE (u.usuario = :username OR u.email = :username) 
+                WHERE (u.usuario = :username OR u.email = :email) 
                 AND u.ativo = 1";
         
-        $user = $this->db->queryOne($sql, [':username' => $username]);
-
-                
+        // CORREÇÃO: usar array associativo com as chaves corretas
+        // Usar dois placeholders, mesmo que o valor seja o mesmo
+        $params = [
+            ':username' => $username,
+            ':email' => $username
+        ];
+       
+        $user = $this->db->queryOne($sql, $params);
+        
+        // Log detalhado para debug
+        $this->logError("SQL: $sql | Params: " . json_encode($params) . " | Result: " . ($user ? 'Found' : 'Not found'));
+        
         if (!$user) {
+            // Adicionado: Log de erro para diagnóstico
+            $this->logError("Usuário não encontrado ou perfil inválido para: $username");
             return false;
         }
         
         // Verificar senha
         if (!password_verify($password, $user['senha'])) {
+            $this->logError("Senha inválida para: $username");
             return false;
         }
         
@@ -50,12 +62,20 @@ class User extends BaseModel {
         return $user;
     }
     
-    // Atualizar último acesso
+    // Método de log de erros (adicionado para debug)
+    private function logError($message) {
+        $date = date('Y-m-d H:i:s');
+        $log = "[$date] [USER ERROR] $message" . PHP_EOL;
+        file_put_contents(LOG_PATH . '/user_error.log', $log, FILE_APPEND);
+    }
+    
+    // Atualizar último acesso - MÉTODO CORRIGIDO
     public function updateLastAccess($userId) {
         $sql = "UPDATE {$this->table} SET ultimo_acesso = NOW() WHERE id = :id";
-        $this->db->prepare($sql);
-        $this->db->bind(':id', $userId);
-        return $this->db->execute();
+        $params = [':id' => $userId];
+        
+        // Usar o método query ao invés de prepare/bind/execute separados
+        return $this->db->query($sql, $params);
     }
     
     // Criar novo usuário
@@ -212,5 +232,60 @@ class User extends BaseModel {
                 ORDER BY ultimo_acesso DESC";
         
         return $this->db->query($sql);
+    }
+    
+    // MÉTODO ADICIONAL: Verificar se o usuário admin existe e criar se necessário
+    public function ensureAdminExists() {
+        // Primeiro, garantir que perfis existam
+        $this->ensureProfilesExist();
+        
+        $admin = $this->findBy('usuario', 'admin');
+        
+        if (!$admin) {
+            // Criar usuário admin
+            $adminData = [
+                'nome_completo' => 'Administrador do Sistema',
+                'email' => 'admin@sorveteria.com',
+                'usuario' => 'admin',
+                'senha' => 'admin123', // Será criptografada no método createUser
+                'perfil_id' => 1,
+                'ativo' => 1
+            ];
+            
+            return $this->createUser($adminData);
+        }
+        
+        return $admin['id'];
+    }
+    
+    // MÉTODO ADICIONAL: Garantir que perfis básicos existam
+    private function ensureProfilesExist() {
+        $sql = "SELECT COUNT(*) as count FROM perfis WHERE id = 1";
+        $result = $this->db->queryOne($sql);
+        
+        if ($result['count'] == 0) {
+            // Criar perfil Administrador
+            $this->db->insert('perfis', [
+                'id' => 1, // Forçar ID 1 se possível, mas se AUTO_INCREMENT, remover
+                'nome' => 'Administrador',
+                'descricao' => 'Acesso total ao sistema'
+            ]);
+            
+            // Criar perfil Operador
+            $this->db->insert('perfis', [
+                'nome' => 'Operador',
+                'descricao' => 'Acesso limitado a saídas de estoque'
+            ]);
+        }
+    }
+    
+    // MÉTODO ADICIONAL: Debug do usuário admin
+    public function debugAdmin() {
+        $sql = "SELECT u.*, p.nome as perfil_nome 
+                FROM {$this->table} u 
+                JOIN perfis p ON u.perfil_id = p.id 
+                WHERE u.usuario = 'admin'";
+        
+        return $this->db->queryOne($sql);
     }
 }

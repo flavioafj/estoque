@@ -1,0 +1,65 @@
+[2025-08-18 10:19:36] [USER ERROR] Usuário não encontrado ou perfil inválido para: admin
+[2025-08-18 10:19:44] [USER ERROR] Usuário não encontrado ou perfil inválido para: admin
+[2025-08-18 10:21:03] [USER ERROR] Usuário não encontrado ou perfil inválido para: admin
+[2025-08-18 10:21:32] [USER ERROR] Usuário não encontrado ou perfil inválido para: admin
+[2025-08-18 10:29:08] [USER ERROR] Usuário não encontrado ou perfil inválido para: admin
+[2025-08-18 10:30:45] [USER ERROR] Usuário não encontrado ou perfil inválido para: admin
+[2025-08-18 10:34:13] [USER ERROR] Sql: SELECT u.*, p.nome as perfil_nome 
+                FROM usuarios u 
+                JOIN perfis p ON u.perfil_id = p.id 
+                WHERE (u.usuario = :username OR u.email = :username) 
+                AND u.ativo = 1
+[2025-08-18 10:34:13] [USER ERROR] Usuário não encontrado ou perfil inválido para: admin
+[2025-08-18 10:49:09] [USER ERROR] Sql: SELECT u.*, p.nome as perfil_nome 
+                FROM usuarios u 
+                JOIN perfis p ON u.perfil_id = p.id 
+                WHERE (u.usuario = admin OR u.email = admin) 
+                AND u.ativo = 1
+[2025-08-18 10:52:55] [USER ERROR] Sql: SELECT u.*, p.nome as perfil_nome 
+                FROM usuarios u 
+                JOIN perfis p ON u.perfil_id = p.id 
+                WHERE (u.usuario = :username OR u.email = :username) 
+                AND u.ativo = 1
+[2025-08-18 10:52:55] [USER ERROR] Usuário não encontrado ou perfil inválido para: admin
+[2025-08-18 10:56:55] [USER ERROR] Sql: SELECT u.*, p.nome as perfil_nome 
+                FROM usuarios u 
+                JOIN perfis p ON u.perfil_id = p.id 
+                WHERE (u.usuario = admin OR u.email = admin) 
+                AND u.ativo = 1
+[2025-08-18 11:03:38] [USER ERROR] params: Array
+[2025-08-18 11:03:38] [USER ERROR] Usuário não encontrado ou perfil inválido para: admin
+[2025-08-18 11:04:57] [USER ERROR] params: 
+[2025-08-18 11:04:57] [USER ERROR] Usuário não encontrado ou perfil inválido para: admin
+[2025-08-18 13:43:36] [USER ERROR] SqlSELECT u.*, p.nome as perfil_nome 
+                FROM usuarios u 
+                JOIN perfis p ON u.perfil_id = p.id 
+                WHERE (u.usuario = :username OR u.email = :username) 
+                AND u.ativo = 1 params: 
+[2025-08-18 13:43:36] [USER ERROR] Usuário não encontrado ou perfil inválido para: admin
+[2025-08-18 13:55:20] [USER ERROR] SQL: SELECT u.*, p.nome as perfil_nome 
+                FROM usuarios u 
+                JOIN perfis p ON u.perfil_id = p.id 
+                WHERE (u.usuario = :username OR u.email = :username) 
+                AND u.ativo = 1 | Params: {":username":"admin"} | Result: Not found
+[2025-08-18 13:55:20] [USER ERROR] Usuário não encontrado ou perfil inválido para: admin
+[2025-08-18 13:55:26] [USER ERROR] SQL: SELECT u.*, p.nome as perfil_nome 
+                FROM usuarios u 
+                JOIN perfis p ON u.perfil_id = p.id 
+                WHERE (u.usuario = :username OR u.email = :username) 
+                AND u.ativo = 1 | Params: {":username":"admin"} | Result: Not found
+[2025-08-18 13:55:26] [USER ERROR] Usuário não encontrado ou perfil inválido para: admin
+[2025-08-18 14:06:06] [USER ERROR] SQL: SELECT u.*, p.nome as perfil_nome 
+                FROM usuarios u 
+                JOIN perfis p ON u.perfil_id = p.id 
+                WHERE (u.usuario = :username OR u.email = :email) 
+                AND u.ativo = 1 | Params: {":username":"admin",":email":"admin"} | Result: Found
+[2025-08-18 14:07:38] [USER ERROR] SQL: SELECT u.*, p.nome as perfil_nome 
+                FROM usuarios u 
+                JOIN perfis p ON u.perfil_id = p.id 
+                WHERE (u.usuario = :username OR u.email = :email) 
+                AND u.ativo = 1 | Params: {":username":"admin",":email":"admin"} | Result: Found
+[2025-08-20 07:37:14] [USER ERROR] SQL: SELECT u.*, p.nome as perfil_nome 
+                FROM usuarios u 
+                JOIN perfis p ON u.perfil_id = p.id 
+                WHERE (u.usuario = :username OR u.email = :email) 
+                AND u.ativo = 1 | Params: {":username":"admin",":email":"admin"} | Result: Found

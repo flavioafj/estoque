@@ -73,33 +73,3 @@
                 JOIN perfis p ON u.perfil_id = p.id 
                 WHERE (u.usuario = :username OR u.email = :email) 
                 AND u.ativo = 1 | Params: {":username":"admin",":email":"admin"} | Result: Found
-[2025-08-20 08:56:10] [USER ERROR] SQL: SELECT u.*, p.nome as perfil_nome 
-                FROM usuarios u 
-                JOIN perfis p ON u.perfil_id = p.id 
-                WHERE (u.usuario = :username OR u.email = :email) 
-                AND u.ativo = 1 | Params: {":username":"admin",":email":"admin"} | Result: Found
-[2025-08-20 09:05:58] [USER ERROR] SQL: SELECT u.*, p.nome as perfil_nome 
-                FROM usuarios u 
-                JOIN perfis p ON u.perfil_id = p.id 
-                WHERE (u.usuario = :username OR u.email = :email) 
-                AND u.ativo = 1 | Params: {":username":"admin",":email":"admin"} | Result: Found
-[2025-08-20 10:03:36] [USER ERROR] SQL: SELECT u.*, p.nome as perfil_nome 
-                FROM usuarios u 
-                JOIN perfis p ON u.perfil_id = p.id 
-                WHERE (u.usuario = :username OR u.email = :email) 
-                AND u.ativo = 1 | Params: {":username":"admin",":email":"admin"} | Result: Found
-[2025-08-20 12:58:24] [USER ERROR] SQL: SELECT u.*, p.nome as perfil_nome 
-                FROM usuarios u 
-                JOIN perfis p ON u.perfil_id = p.id 
-                WHERE (u.usuario = :username OR u.email = :email) 
-                AND u.ativo = 1 | Params: {":username":"admin",":email":"admin"} | Result: Found
-[2025-08-20 13:02:51] [USER ERROR] SQL: SELECT u.*, p.nome as perfil_nome 
-                FROM usuarios u 
-                JOIN perfis p ON u.perfil_id = p.id 
-                WHERE (u.usuario = :username OR u.email = :email) 
-                AND u.ativo = 1 | Params: {":username":"admin",":email":"admin"} | Result: Found
-[2025-08-20 14:06:15] [USER ERROR] SQL: SELECT u.*, p.nome as perfil_nome 
-                FROM usuarios u 
-                JOIN perfis p ON u.perfil_id = p.id 
-                WHERE (u.usuario = :username OR u.email = :email) 
-                AND u.ativo = 1 | Params: {":username":"admin",":email":"admin"} | Result: Found

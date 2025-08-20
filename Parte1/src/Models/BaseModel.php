@@ -6,15 +6,6 @@
 
 namespace Models;
 
-$databasePath = __DIR__ . '/Database.php';
-if (!file_exists($databasePath)) {
-    error_log("BaseModel.php: Não encontrou Database.php em $databasePath", 3, __DIR__ . '/../../logs/error.log');
-    die("Erro: Não foi possível carregar Database.php.");
-}
-require_once $databasePath;
-
-
-
 abstract class BaseModel {
     protected $db;
     protected $table;

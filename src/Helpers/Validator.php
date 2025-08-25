@@ -19,8 +19,10 @@ class Validator {
             // Inicializa $errors[$field] como array
             $errors[$field] = $errors[$field] ?? [];
             $ruleParts = explode('|', $ruleString);
+             // Debugging line to check parsed rules
             foreach ($ruleParts as $rule) {
                 // Regra: required
+                
                 if ($rule === 'required' && empty($data[$field])) {
                     $errors[$field][] = "$field é obrigatório.";
                 }

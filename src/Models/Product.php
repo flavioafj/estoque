@@ -34,7 +34,15 @@ class Product extends BaseModel {
         return $this->where('ativo', 1);
     }
 
+    public function getAllinativo() {
+        return $this->where('ativo', 0);
+    }
+
     public function getById($id) {
         return $this->find($id);
     }
+}
+
+class UnidadeDeMedida extends BaseModel {
+    protected $table = 'unidades_medida';
 }

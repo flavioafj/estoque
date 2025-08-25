@@ -1,13 +1,24 @@
 <?php
 use Middleware\Auth;
+use Helpers\Validator;
 
 require_once __DIR__ . '/../Models/Category.php';
 require_once __DIR__ . '/../Helpers/Validator.php';
 require_once __DIR__ . '/../Helpers/Session.php'; // Conforme Parte 1
 require_once __DIR__ . '/../Middleware/Auth.php'; // Conforme Parte 1
 
+// Função auxiliar para verificar se há erros reais
+function hasErrors($errors) {
+    foreach ($errors as $fieldErrors) {
+        if (!empty($fieldErrors)) {
+            return true;
+        }
+    }
+    return false;
+}
+
 class CategoryController {
-    private $categoryModel;
+    public $categoryModel;
 
     public function __construct() {
         $this->categoryModel = new Category();
@@ -31,16 +42,16 @@ class CategoryController {
             'ativo' => 'boolean'
         ]);
 
-        if (!empty($errors)) {
-            Session::set('errors', $errors);
-            header('Location: /admin/categories.php');
+        if (hasErrors($errors)) {
+            $_SESSION['errors'] = $errors;
+            header('Location: /estoque-sorveteria/admin/categories.php');
             exit;
         }
 
         $data['ativo'] = isset($data['ativo']) ? 1 : 0;
         $this->categoryModel->create($data);
-        Session::set('success', 'Categoria criada com sucesso.');
-        header('Location: /admin/categories.php');
+        $_SESSION['success'] = 'Categoria criada com sucesso.';
+        header('Location: /estoque-sorveteria/admin/categories.php');
     }
 
     public function update($id) {
@@ -51,21 +62,28 @@ class CategoryController {
             'ativo' => 'boolean'
         ]);
 
-        if (!empty($errors)) {
-            Session::set('errors', $errors);
-            header('Location: /admin/categories.php');
+        if (hasErrors($errors)) {
+            $_SESSION['errors'] = $errors;
+            header('Location: /estoque-sorveteria/admin/categories.php');
             exit;
         }
 
         $data['ativo'] = isset($data['ativo']) ? 1 : 0;
         $this->categoryModel->update($id, $data);
-        Session::set('success', 'Categoria atualizada.');
-        header('Location: /admin/categories.php');
+        $_SESSION['success'] = 'Categoria atualizada.';
+        header('Location: /estoque-sorveteria/admin/categories.php');
     }
 
     public function destroy($id) {
         $this->categoryModel->delete($id);
-        Session::set('success', 'Categoria desativada.');
-        header('Location: /admin/categories.php');
+        $_SESSION['success'] = 'Categoria desativada.';
+        header('Location: /estoque-sorveteria/admin/categories.php');
+    }
+
+    public function reactivate($id) {
+        $this->categoryModel->update($id, ['ativo' => 1]);
+        $_SESSION['success'] = 'Categoria reativada com sucesso.';
+        header('Location: /estoque-sorveteria/admin/categories.php?view=inactive');
+        exit;
     }
 }

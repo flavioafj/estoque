@@ -37,10 +37,16 @@ $userName = Session::getUserName() ?: 'Usuário';
                 <li class="nav-item">
                     <a class="nav-link" href="/estoque-sorveteria/admin/products.php">Gerenciar Produtos</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/estoque-sorveteria/admin/entradas.php">Registrar Entrada</a>
+                </li>
                 <?php else: ?>
                     <li class="nav-item">
                         <span class="nav-link">Acesso restrito (não admin)</span>
                     </li>
+                    <li class="nav-item">
+                    <a class="nav-link" href="/estoque-sorveteria/saidas.php">Registrar Saída</a>
+                </li>
                 <?php endif; ?>
             </ul>
             <ul class="navbar-nav">

@@ -157,6 +157,13 @@ include __DIR__ . '/../../templates/alerts.php'; // Conforme Parte 1
                 <td><?= htmlspecialchars($prod['estoque_atual']) ?></td>
                 <td><?= htmlspecialchars($prod['estoque_minimo']) ?></td>
                 <td><?= htmlspecialchars($prod['preco_venda'] ?? '0.00') ?></td>
+                <!-- VALOR DO ESTOQUE -->
+                                    <td>
+                                        <?= number_format($prod['estoque_atual'], 2, ',', '.') ?>
+                                        <?php if ($prod['estoque_atual'] <= $prod['estoque_minimo']): ?>
+                                            <span class="badge bg-danger">Baixo</span>
+                                        <?php endif; ?>
+                                    </td>
                 <td><?= $prod['ativo'] ? 'Sim' : 'Não' ?></td>
                 <td>
                     <!-- Formulário de Atualização -->

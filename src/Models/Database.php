@@ -116,7 +116,11 @@ class Database {
     
     // Reverter transação
     public function rollback() {
-        return $this->connection->rollBack();
+        if ($this->connection->inTransaction()) {
+            return $this->connection->rollBack();
+        }
+        $this->logError("Tentativa de rollback sem transação ativa.");
+        return false;
     }
     
     // Query rápida com resultado

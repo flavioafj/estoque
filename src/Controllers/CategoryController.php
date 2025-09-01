@@ -1,8 +1,9 @@
 <?php
 use Middleware\Auth;
 use Helpers\Validator;
+use Models\Category;
 
-require_once __DIR__ . '/../Models/Category.php';
+
 require_once __DIR__ . '/../Helpers/Validator.php';
 require_once __DIR__ . '/../Helpers/Session.php'; // Conforme Parte 1
 require_once __DIR__ . '/../Middleware/Auth.php'; // Conforme Parte 1

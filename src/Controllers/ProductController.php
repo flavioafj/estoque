@@ -1,33 +1,26 @@
 <?php
 use Helpers\Validator;
+use Models\Category;
+use models\Fornecedor;
 
 $productPath = __DIR__ . '/../Models/Product.php';
-$categoryPath = __DIR__ . '/../Models/Category.php';
 $validatorPath = __DIR__ . '/../Helpers/Validator.php';
-$fornecedorPath = __DIR__ . '/../Models/Fornecedor.php';
+
 
 if (!file_exists($productPath)) {
     error_log("ProductController.php: Não encontrou Product.php em $productPath", 3, __DIR__ . '/../../logs/error.log');
     die("Erro: Não foi possível carregar Product.php.");
 }
-if (!file_exists($categoryPath)) {
-    error_log("ProductController.php: Não encontrou Category.php em $categoryPath", 3, __DIR__ . '/../../logs/error.log');
-    die("Erro: Não foi possível carregar Category.php.");
-}
+
 if (!file_exists($validatorPath)) {
     error_log("ProductController.php: Não encontrou Validator.php em $validatorPath", 3, __DIR__ . '/../../logs/error.log');
     die("Erro: Não foi possível carregar Validator.php.");
 }
 
-if (!file_exists($fornecedorPath)) {
-    error_log("ProductController.php: Não encontrou Fornecedor.php em $fornecedorPath", 3, __DIR__ . '/../../logs/error.log');
-    die("Erro: Não foi possível carregar Fornecedor.php.");
-}
+
 
 require_once $productPath;
-require_once $categoryPath;
-//require_once $validatorPath;
-require_once $fornecedorPath;
+
 
 // Função auxiliar para verificar se há erros reais
 function hasErrors($errors) {

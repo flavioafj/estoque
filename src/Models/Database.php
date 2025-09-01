@@ -41,6 +41,7 @@ class Database {
     public function prepare($sql) {
         try {
             $this->statement = $this->connection->prepare($sql);
+            
             return $this;
         } catch (PDOException $e) {
             $this->logError("Erro ao preparar query: " . $e->getMessage() . " SQL: " . $sql);
@@ -66,8 +67,14 @@ class Database {
             }
         }
         
-        $this->statement->bindValue($param, $value, $type);
-        return $this;
+        try {
+            $this->statement->bindValue($param, $value, $type);
+            $this->logError("Parâmetro associado: $param = " . (is_null($value) ? 'NULL' : $value) . " (tipo: $type)");
+            return $this;
+        } catch (PDOException $e) {
+            $this->logError("Erro ao associar parâmetro $param: " . $e->getMessage());
+            return false;
+        }
     }
     
     // Executar query
@@ -125,16 +132,28 @@ class Database {
     
     // Query rápida com resultado
     public function query($sql, $params = []) {
-        $this->prepare($sql);
-        
-        if (!empty($params)) {
-            foreach ($params as $key => $value) {
-                $this->bind($key, $value);
-            }
+         if ($this->prepare($sql) === false) {
+            return [];
         }
         
-        $this->execute();
-        return $this->fetchAll();
+        // Log para debugging
+        $this->logError("Preparando query: $sql com parâmetros: " . json_encode($params));
+        
+        foreach ($params as $key => $value) {
+            if (!$this->bind($key, $value)) {
+                return [];
+            }
+        }
+       
+        if ($this->execute()) {
+            // Debug após binding
+            ob_start();
+            $this->statement->debugDumpParams();
+            $this->logError("Debug PDO após binding: " . ob_get_clean());
+            return $this->fetchAll();
+        }
+        
+        return [];
     }
     
     // Query rápida para um único resultado

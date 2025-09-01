@@ -5,4 +5,10 @@ RewriteBase /estoque-sorveteria/api/
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 # Redireciona todas as requisições para index.php
-RewriteRule ^(.*)$ index.php [L]
+RewriteRule ^(.*)$ index.php [QSA,L]
+<FilesMatch "^api/.*$">
+    AuthType Basic
+    AuthName "API Access"
+    Require valid-user
+    # Configurar autenticação conforme necessário
+</FilesMatch>

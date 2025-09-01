@@ -1,9 +1,13 @@
 <?php
 header('Content-Type: application/json; charset=utf-8');
 require_once __DIR__ . '/../../config/config.php';
+//require_once __DIR__ . '/../../src/autoload.php'; uso futuro
 // Caminhos para os arquivos necessários
 $controllerPath = __DIR__ . '/../../src/Controllers/ProductController.php';
 $sessionPath = __DIR__ . '/../../src/Helpers/Session.php';
+
+use Controllers\ReportController;
+use Helpers\Session;
 
 // Verifica se os arquivos existem
 if (!file_exists($controllerPath)) {
@@ -65,7 +69,17 @@ if ($requestUri === 'api/products') {
         http_response_code(500);
         echo json_encode(['error' => 'Erro ao buscar produto']);
     }
-} else {
+} elseif (preg_match('#^public/api/reports/custom$#', $requestUri)) {
+    $reportController = new ReportController();
+
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        http_response_code(200);
+        $reportController->generate();
+    } else {
+        http_response_code(405);
+        echo json_encode(['error' => 'Método não permitido']);
+    }
+}else {
     http_response_code(404);
     echo json_encode(['error' => 'Rota não encontrada']);
 }

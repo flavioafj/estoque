@@ -1,4 +1,6 @@
 <?php
+namespace Models;
+
 use Models\BaseModel;
 
 $baseModelPath = __DIR__ . '/BaseModel.php';

@@ -2,14 +2,14 @@
 require_once '../../config/config.php';
 require_once SRC_PATH . '/Helpers/Session.php';
 require_once SRC_PATH . '/Models/Database.php';
-require_once SRC_PATH . '/Models/Fornecedor.php';
+//require_once SRC_PATH . '/Models/Fornecedor.php';
 require_once SRC_PATH . '/Models/Movimentacao.php';
 require_once SRC_PATH . '/Models/MovimentacaoItem.php';
 require_once SRC_PATH . '/Models/TipoMovimentacao.php';
 
 use Helpers\Session;
 use Models\Database;
-//use Models\Fornecedor;
+use Models\Fornecedor;
 use Models\Movimentacao;
 use Models\MovimentacaoItem;
 use Models\TipoMovimentacao;

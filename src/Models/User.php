@@ -58,6 +58,7 @@ class User extends BaseModel {
         
         // Remover senha do retorno
         unset($user['senha']);
+
         
         return $user;
     }
@@ -276,6 +277,17 @@ class User extends BaseModel {
                 'nome' => 'Operador',
                 'descricao' => 'Acesso limitado a saídas de estoque'
             ]);
+        }
+    }
+
+    public function getAdmins() {
+        try {
+            $stmt = $this->db->prepare("SELECT email FROM usuarios WHERE perfil_id = 1 AND ativo = TRUE");
+            $stmt->execute();
+            return $stmt->fetchAll();
+        } catch (PDOException $e) {
+            error_log("User::getAdmins: " . $e->getMessage(), 3, __DIR__ . '/../../logs/error.log');
+            return [];
         }
     }
     

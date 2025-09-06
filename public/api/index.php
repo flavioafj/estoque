@@ -8,6 +8,7 @@ $sessionPath = __DIR__ . '/../../src/Helpers/Session.php';
 
 use Controllers\ReportController;
 use Helpers\Session;
+use Controllers\AlertController;
 
 // Verifica se os arquivos existem
 if (!file_exists($controllerPath)) {
@@ -25,6 +26,9 @@ if (!file_exists($sessionPath)) {
 
 require_once $controllerPath;
 require_once $sessionPath;
+require_once __DIR__ . '/../../src/Controllers/AlertController.php';
+require_once __DIR__ . '/../../src/Models/Alert.php';
+
 
 // Inicializa a sessão (se autenticação for necessária)
 if (session_status() === PHP_SESSION_NONE) {
@@ -79,6 +83,14 @@ if ($requestUri === 'api/products') {
         http_response_code(405);
         echo json_encode(['error' => 'Método não permitido']);
     }
+} elseif (preg_match('#^public/api/alerts$#', $requestUri)) {
+    $controller = new AlertController();
+    http_response_code(200);
+    echo $controller->getPending();
+} elseif (preg_match('#^public/api/alerts/mark-read$#', $requestUri)) {
+    $controller = new AlertController();
+    http_response_code(200);
+    echo $controller->markAsRead();
 }else {
     http_response_code(404);
     echo json_encode(['error' => 'Rota não encontrada']);

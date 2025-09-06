@@ -7,6 +7,7 @@ require_once '../config/config.php';
 use Helpers\Session;
 use Controllers\CategoryController;
 use Controllers\ProductController;
+use Controllers\AlertController;
 
 Session::start();
 
@@ -52,6 +53,10 @@ if ($requestUri === '/admin/products.php') {
 } elseif (preg_match('/\/product\/destroy\/(\d+)/', $requestUri, $matches)) {
     $controller = new ProductController();
     $controller->destroy($matches[1]);
+ }elseif ($requestUri === '/estoque-sorveteria/public/alerts') {
+    require_once __DIR__ . '/../src/Controllers/AlertController.php';
+    $controller = new Controllers\AlertController();
+    $controller->renderAlerts();
 }
 
 // API Endpoints
@@ -61,4 +66,4 @@ if ($requestUri === '/api/products') {
 } elseif (preg_match('/\/api\/product\/(\d+)/', $requestUri, $matches)) {
     $controller = new ProductController();
     $controller->apiGetById($matches[1]);
-}
+} 

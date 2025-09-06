@@ -6,6 +6,7 @@ use Controllers\BaseController;
 use Models\Movimentacao;
 use Models\MovimentacaoItem;
 use Helpers\Session;
+use Models\Alert;
 
 class MovimentacaoController extends BaseController
 {
@@ -48,6 +49,13 @@ class MovimentacaoController extends BaseController
         if ($movimentacaoId) {
             $itemModel = new MovimentacaoItem();
             if ($itemModel->adicionarItens($movimentacaoId, $itens)) {
+
+                // Verifica estoque mínimo para cada item
+                $alertModel = new Alert();
+                foreach ($itens as $item) {
+                    $alertModel->checkLowStock($item);
+                }
+
                 $session->setFlash('success', 'Entrada de estoque registrada com sucesso!');
             } else {
                 $session->setFlash('error', 'Falha ao registrar os itens da entrada.');
@@ -89,6 +97,13 @@ class MovimentacaoController extends BaseController
         if ($movimentacaoId) {
             $itemModel = new MovimentacaoItem();
             if ($itemModel->adicionarItens($movimentacaoId, $itens)) {
+
+                // Verifica estoque mínimo para cada item
+                $alertModel = new Alert();
+                foreach ($itens as $produtoId => $item) {
+                    $alertModel->checkLowStock($produtoId);   
+                }
+
                 $session->setFlash('success', 'Saída de estoque registrada com sucesso!');
             } else {
                 $session->setFlash('error', 'Falha ao registrar os itens da saída.');

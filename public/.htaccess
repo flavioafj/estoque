@@ -3,6 +3,7 @@ RewriteEngine On
 # Redirecionar para HTTPS (opcional - descomente se necessário)
 # RewriteCond %{HTTPS} off
 # RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+RewriteRule ^alerts$ index.php [L,NC]
 
 # Bloquear acesso direto a arquivos sensíveis
 <Files ~ "\.(log|sql|md|txt|env)$">

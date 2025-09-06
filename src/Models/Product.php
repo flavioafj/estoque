@@ -1,5 +1,6 @@
 <?php
 use Models\BaseModel;
+use Models\Alert;
 
 $baseModelPath = __DIR__ . '/BaseModel.php';
 if (!file_exists($baseModelPath)) {
@@ -106,7 +107,12 @@ class Product extends BaseModel {
             }
 
             $resultado = $stmt->execute([$quantidade, $produtoId]);
-            
+
+            // Verifica estoque mínimo após atualização
+            $alertModel = new Alert();
+            $alertModel->checkLowStock($produtoId);
+
+
             if ($resultado) {
                 error_log("Estoque atualizado com sucesso. Produto: $produtoId, Quantidade: $quantidade, Tipo: $tipoMovimentacao");
                 return true;

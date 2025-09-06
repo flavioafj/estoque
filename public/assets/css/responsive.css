@@ -35,3 +35,12 @@
         font-size: 12px;
     }
 }
+@media (max-width: 600px) {
+    .alerts-container table {
+        display: block;
+        overflow-x: auto;
+    }
+    .mark-read {
+        width: 100%;
+    }
+}

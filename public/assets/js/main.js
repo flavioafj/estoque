@@ -9,4 +9,17 @@ document.addEventListener('DOMContentLoaded', function() {
             alert.style.display = 'none';
         }, 5000);
     });
+
+    const closeButtons = document.querySelectorAll('.close-button');
+
+    
+    closeButtons.forEach(button => {
+       
+        button.addEventListener('click', () => {
+          
+            const alertDiv = button.parentElement;
+                        
+            alertDiv.style.display = 'none';
+        });
+    });
 });

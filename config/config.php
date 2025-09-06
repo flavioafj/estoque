@@ -4,6 +4,15 @@
  * config/config.php
  */
 
+require_once __DIR__ . '/../vendor/autoload.php';
+
+use Dotenv\Dotenv;
+
+// Carrega o arquivo .env
+$dotenv = Dotenv::createImmutable(__DIR__ . '/..');
+$dotenv->load();
+
+
 // Iniciar sessão se ainda não iniciada
 if (session_status() === PHP_SESSION_NONE) {
     session_start();

@@ -95,4 +95,46 @@ h1 {
 .table tbody tr:nth-child(even) {
     background-color: #f2f2f2;
 }
+.alert-warning {
+    position: relative;
+    padding-left: 30px;
+    background-color: #fff3cd;
+    border-color: #ffeeba;
+    color: #856404;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+}
+.close-button {
+    position: absolute;
+    top: 50%; /* Centraliza verticalmente o 'x' */
+    right: 10px; /* Posiciona o 'x' à esquerda */
+    transform: translateY(-50%); /* Ajuste fino para o centro exato */
+    font-weight: bold;
+    font-size: 20px;
+    cursor: pointer;
+    color: #a94442; /* Cor diferente para o 'x' */
+    user-select: none; /* Impede que o 'x' seja selecionado ao arrastar o mouse */
+}
+.alerts-container {
+    margin-top: 20px;
+}
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.table th, .table td {
+    padding: 10px;
+    border: 1px solid #ddd;
+}
+.table th {
+    background-color: #f2f2f2;
+}
+.mark-read {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+}
 

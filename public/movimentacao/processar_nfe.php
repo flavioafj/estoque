@@ -2,13 +2,13 @@
 use Helpers\Session;
 use Helpers\NFeProcessor;
 //use Models\Product;
-//use Models\Fornecedor; // ADICIONADO
+use Models\Fornecedor; // ADICIONADO
 
 // Carrega as configurações e dependências
 require_once '../../config/config.php';
 require_once SRC_PATH . '/Helpers/NFeProcessor.php';
 require_once SRC_PATH . '/Models/Product.php';
-require_once SRC_PATH . '/Models/Fornecedor.php'; // ADICIONADO
+//require_once SRC_PATH . '/Models/Fornecedor.php'; // ADICIONADO
 
 // Inicia a sessão e verifica se o usuário é administrador
 Session::start();

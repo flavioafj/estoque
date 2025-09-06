@@ -4,6 +4,9 @@
  * config/database.php
  */
 
+require_once __DIR__ . '/../vendor/autoload.php';
+
+
 // Detectar ambiente (local ou produção)
 $is_local = ($_SERVER['SERVER_NAME'] === 'localhost' || $_SERVER['SERVER_NAME'] === '127.0.0.1');
 

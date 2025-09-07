@@ -18,6 +18,7 @@ class MovimentacaoController extends BaseController
         $session = new Session();
         $usuarioId = $session->get('user_id');
         $itens = $postData['produtos'] ?? [];
+        $valoresUnitarios = $postData['valor_unitario'] ?? [];
         $tipoMovimentacaoId = $postData['tipo_movimentacao_id'] ?? null; // NOVO
         $observacao = $postData['observacao'] ?? ''; // NOVO
 
@@ -45,14 +46,22 @@ class MovimentacaoController extends BaseController
 
         $movimentacaoModel = new Movimentacao();
         $movimentacaoId = $movimentacaoModel->criar($tipoMovimentacaoId, $usuarioId, $observacao);
+        
+        // Log para movimentacoes
+        $movimentacaoModel->logAudit('INSERT', $movimentacaoId, null, $postData);
 
         if ($movimentacaoId) {
             $itemModel = new MovimentacaoItem();
-            if ($itemModel->adicionarItens($movimentacaoId, $itens)) {
+            if ($itemModel->adicionarItens($movimentacaoId, $itens, $valoresUnitarios)) {
 
                 // Verifica estoque mínimo para cada item
                 $alertModel = new Alert();
                 foreach ($itens as $item) {
+
+                    if (isset($item['id'])) { // Assumindo que adicionarItens retorna IDs
+                        $itemModel->logAudit('INSERT', $item['id'], null, $item);
+                    }
+
                     $alertModel->checkLowStock($item);
                 }
 
@@ -63,6 +72,10 @@ class MovimentacaoController extends BaseController
         } else {
             $session->setFlash('error', 'Falha ao criar o registro de movimentação.');
         }
+        //adiciona valor total na movimentação
+        $valorTotal = array_sum($valoresUnitarios)? array_sum($valoresUnitarios) : 0;
+        $valorTotal = floatval($valorTotal);
+        $movimentacaoModel->atualizarValorTotal($movimentacaoId, $valorTotal);
 
         header('Location: /estoque-sorveteria/public/admin/products.php');
     }
@@ -93,6 +106,9 @@ class MovimentacaoController extends BaseController
 
         $movimentacaoModel = new Movimentacao();
         $movimentacaoId = $movimentacaoModel->criar($tipoMovimentacaoId, $usuarioId, $observacao);
+        
+        // Log para movimentacoes
+        $movimentacaoModel->logAudit('INSERT', $movimentacaoId, null, $postData);
 
         if ($movimentacaoId) {
             $itemModel = new MovimentacaoItem();
@@ -100,7 +116,12 @@ class MovimentacaoController extends BaseController
 
                 // Verifica estoque mínimo para cada item
                 $alertModel = new Alert();
+
                 foreach ($itens as $produtoId => $item) {
+                    
+                    if (isset($item['id'])) { // Assumindo que adicionarItens retorna IDs
+                        $itemModel->logAudit('INSERT', $item['id'], null, $item);
+                    }
                     $alertModel->checkLowStock($produtoId);   
                 }
 

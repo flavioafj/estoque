@@ -6,6 +6,15 @@
 
 namespace Models;
 
+use Models\BaseModel;
+
+$baseModelPath = __DIR__ . '/BaseModel.php';
+if (!file_exists($baseModelPath)) {
+    error_log("Category.php: Não encontrou BaseModel.php em $baseModelPath", 3, __DIR__ . '/../../logs/error.log');
+    die("Erro: Não foi possível carregar BaseModel.php.");
+}
+//require_once $baseModelPath;
+
 class User extends BaseModel {
     protected $table = 'usuarios';
     protected $fillable = [

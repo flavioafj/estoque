@@ -67,7 +67,7 @@ class Report extends BaseModel
      * @param string|null $data_fim Data limite para considerar entradas (formato YYYY-MM-DD)
      * @return float Valor do estoque FIFO
      */
-    private function calculateFIFO($produto_id, $data_fim = null)
+    public function calculateFIFO($produto_id, $data_fim = null)
     {
         // Query para buscar entradas ordenadas (FIFO)
         $sql = "
@@ -82,7 +82,7 @@ class Report extends BaseModel
             WHERE tm.tipo = 'ENTRADA'
                 AND mi.produto_id = :produto_id
                 AND (:data_fim_a IS NULL OR m.criado_em <= :data_fim)
-            ORDER BY m.criado_em ASC, mi.id ASC;
+            ORDER BY m.criado_em DESC, mi.id ASC;
         ";
 
         $params = [

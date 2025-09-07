@@ -27,10 +27,10 @@ $userName = Session::getUserName() ?: 'Usuário';
         <div class="collapse navbar-collapse" id="navbarNav">
             <?php if (Session::isLoggedIn()): ?>
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <?php if ($userRole == 1): ?>  <!-- Administrador -->
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="/estoque-sorveteria/dashboard.php">Dashboard</a>
                 </li>
-                <?php if ($userRole == 1): ?>
                 <li class="nav-item">
                     <a class="nav-link" href="/estoque-sorveteria/admin/categories.php">Gerenciar Categorias</a>
                 </li>
@@ -40,14 +40,22 @@ $userName = Session::getUserName() ?: 'Usuário';
                 <li class="nav-item">
                     <a class="nav-link" href="/estoque-sorveteria/admin/entradas.php">Registrar Entrada</a>
                 </li>
-                <?php else: ?>
-                    <li class="nav-item">
-                        <span class="nav-link">Acesso restrito (não admin)</span>
-                    </li>
-                    <li class="nav-item">
+                <li class="nav-item">
+                    <a class="nav-link" href="/estoque-sorveteria/audit.php">Auditoria</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/estoque-sorveteria/reports.php">Valor do estoque</a>
+                </li>
+                <?php else: ?>  <!-- Operador -->
+                <li class="nav-item">
+                    <span class="nav-link">Acesso restrito (não admin)</span>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" href="/estoque-sorveteria/saidas.php">Registrar Saída</a>
                 </li>
                 <?php endif; ?>
+            </ul>
+            <!-- Resto do código continua igual -->
             </ul>
             <ul class="navbar-nav">
                 <li class="nav-item dropdown">

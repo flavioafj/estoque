@@ -9,6 +9,7 @@ $sessionPath = __DIR__ . '/../../src/Helpers/Session.php';
 use Controllers\ReportController;
 use Helpers\Session;
 use Controllers\AlertController;
+use Controllers\AuditController;
 
 // Verifica se os arquivos existem
 if (!file_exists($controllerPath)) {
@@ -91,7 +92,37 @@ if ($requestUri === 'api/products') {
     $controller = new AlertController();
     http_response_code(200);
     echo $controller->markAsRead();
-}else {
+} elseif (preg_match('#^public/api/audit$#', $requestUri)) {
+    require_once __DIR__ . '/../../src/Controllers/AuditController.php';
+    
+    $json_data = file_get_contents('php://input');
+    $data = json_decode($json_data, true);
+
+    if ($data === null) {
+        // Se a decodificação falhar, retorna um erro
+        http_response_code(400); // Bad Request
+        echo json_encode(['error' => 'JSON inválido na requisição.']);
+        exit;
+    }
+    $controller = new AuditController(); 
+    $controller->getLogs($data);
+} elseif (preg_match('#^public/api/dashboard/summary$#', $requestUri)) {
+    require_once __DIR__ . '/../../src/Controllers/DashboardController.php';
+    $controller = new Controllers\DashboardController();
+    $controller->getSummary();
+} elseif (preg_match('#^public/api/dashboard/low-stock$#', $requestUri)) {
+    require_once __DIR__ . '/../../src/Controllers/DashboardController.php';
+    $controller = new Controllers\DashboardController();
+    $controller->getLowStock();
+} elseif (preg_match('#^public/api/dashboard/recent-movements$#', $requestUri)) {
+    require_once __DIR__ . '/../../src/Controllers/DashboardController.php';
+    $controller = new Controllers\DashboardController();
+    $controller->getRecentMovements();
+} elseif (preg_match('#^public/api/dashboard/stock-turnover$#', $requestUri)) {
+    require_once __DIR__ . '/../../src/Controllers/DashboardController.php';
+    $controller = new Controllers\DashboardController();
+    $controller->getStockTurnover();
+ } else {
     http_response_code(404);
     echo json_encode(['error' => 'Rota não encontrada']);
 }

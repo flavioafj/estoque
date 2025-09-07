@@ -66,6 +66,7 @@ include __DIR__ . '/../../templates/navigation.php';
                             <tr>
                                 <th>Produto</th>
                                 <th style="width: 150px;">Quantidade a Adicionar</th>
+                                <th style="width: 150px;">Valor unitário</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -73,7 +74,10 @@ include __DIR__ . '/../../templates/navigation.php';
                             <tr>
                                 <td><?= htmlspecialchars($product['nome']) ?></td>
                                 <td>
-                                    <input type="number" step="0.001" min="0" class="form-control" name="produtos[<?= $product['id'] ?>]" value="0">
+                                    <input type="number" step="1" min="0" class="form-control" name="produtos[<?= $product['id'] ?>]" value="0">
+                                </td>
+                                                                <td>
+                                    <input type="number" step="0.01" min="0" class="form-control" name="valor_unitario[<?= $product['id'] ?>]" value="0">
                                 </td>
                             </tr>
                             <?php endforeach; ?>

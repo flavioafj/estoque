@@ -186,7 +186,7 @@ abstract class BaseModel {
     }
     
     // Log de auditoria
-    protected function logAudit($action, $recordId, $oldData = null, $newData = null) {
+    public function logAudit($action, $recordId, $oldData = null, $newData = null) {
         $userId = $_SESSION['user_id'] ?? null;
         $ipAddress = $_SERVER['REMOTE_ADDR'] ?? null;
         $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? null;

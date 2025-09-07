@@ -17,7 +17,7 @@ class MovimentacaoItem extends BaseModel
      * @param array $itens
      * @return bool
      */
-    public function adicionarItens(int $movimentacaoId, array $itens): bool
+    public function adicionarItens(int $movimentacaoId, array $itens, array $valoresUnitarios = null): bool
     {
         try {
             // Validação básica
@@ -64,8 +64,10 @@ class MovimentacaoItem extends BaseModel
 
                 $quantidade = floatval($quantidade);
                 $produtoId = intval($produtoId);
+                $valoresUnitariosf = floatval($valoresUnitarios[$produtoId] ?? 0);
+                $valorTotalItem = $quantidade * $valoresUnitariosf;
 
-                $sql = "INSERT INTO {$this->table} (movimentacao_id, produto_id, quantidade) VALUES (?, ?, ?)";
+                $sql = "INSERT INTO {$this->table} (movimentacao_id, produto_id, quantidade, valor_unitario, valor_total) VALUES (?, ?, ?, ?, ?)";
                 $stmt = $this->db->prepare($sql);
 
                 if ($stmt === false) {
@@ -76,7 +78,7 @@ class MovimentacaoItem extends BaseModel
 
                 // Insere o item na tabela de movimentação
               
-                $resultadoInsercao = $stmt->execute([$movimentacaoId, $produtoId, $quantidade]);
+                $resultadoInsercao = $stmt->execute([$movimentacaoId, $produtoId, $quantidade, $valoresUnitariosf, $valorTotalItem]);
 
                                
                 if (!$resultadoInsercao) {

@@ -34,11 +34,79 @@ $pendingCount = count($alertModel->getPendingAlerts());
     </div>
 <?php endif; ?>
 
-<main class="container mt-4">
+<main class="container dashboard-container mt-4">
     <h1>Bem-vindo, <?php echo htmlspecialchars($userName); ?>!</h1>
+    <?php if (Session::isAdmin()): ?>
     <p>Este é o painel principal do Sistema de Controle de Estoque.</p>
     
-    </main>
+    <!-- Cards Resumo -->
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">Resumo do Estoque</div>
+                <div class="card-body">
+                    <p><strong>Total em Estoque:</strong> <span id="total-estoque">0</span> unidades</p>
+                    <p><strong>Valor FIFO:</strong> <span id="valor-fifo">R$ 0.00</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
 
+    <!-- Estoque Baixo -->
+    <div class="card">
+        <div class="card-header">Produtos com Estoque Baixo</div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped" id="low-stock-table">
+                    <thead>
+                        <tr>
+                            <th>Código</th>
+                            <th>Nome</th>
+                            <th>Categoria</th>
+                            <th>Fornecedor</th>
+                            <th>Estoque Atual</th>
+                            <th>Estoque Mínimo</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Movimentações Recentes -->
+    <div class="card">
+        <div class="card-header">Movimentações Recentes</div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped" id="recent-movements-table">
+                    <thead>
+                        <tr>
+                            <th>Tipo</th>
+                            <th>Documento</th>
+                            <th>Data</th>
+                            <th>Fornecedor</th>
+                            <th>Usuário</th>
+                            <th>Valor Total</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Gráfico de Giro -->
+    <div class="card">
+        <div class="card-header">Giro de Estoque (Últimos 6 Meses)</div>
+        <div class="card-body">
+            <div class="canvas-container">
+                <canvas id="stockTurnoverChart"></canvas>
+            </div>
+        </div>
+    </div>
+    <?php endif; ?>
+</main>
+<script src="/estoque-sorveteria/public/assets/js/dashboard.js"></script>
 <?php
 require_once '../templates/footer.php';

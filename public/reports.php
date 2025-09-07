@@ -95,5 +95,3 @@ $title = 'Relatórios de Estoque';
         </div>
     </main>
     <?php include __DIR__ . '/../templates/footer.php'; ?>
-</body>
-</html>

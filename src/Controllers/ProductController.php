@@ -92,14 +92,10 @@ class ProductController {
             'nome' => "required|unique:produtos,nome,$id",
             'codigo' => "unique:produtos,codigo,$id",
             'categoria_id' => 'required|exists:categorias,id',
-            'estoque_atual' => 'required|numeric|min:0',
-            'estoque_minimo' => 'required|numeric|min:0',
-            'preco_venda' => 'required|numeric|min:0',
+            'estoque_atual' => 'numeric|min:0',
+            'estoque_minimo' => 'numeric|min:0',
             'ativo' => 'boolean',
             'unidade_medida_id' => 'exists:unidades_medida,id',
-            'estoque_maximo' => 'numeric|min:0',
-            'preco_custo' => 'numeric|min:0',
-            'margem_lucro' => 'numeric|min:0',
             'fornecedor_principal_id' => 'exists:fornecedores,id'
         ];
 

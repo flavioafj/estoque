@@ -65,6 +65,7 @@ foreach ($produtos as $index => $produto) {
     if (!empty($produto['id_produto_sistema']) && is_numeric($produto['id_produto_sistema']) &&
         is_numeric($produto['quantidade']) && floatval($produto['quantidade']) > 0) {
         $itensValidos[$produto['id_produto_sistema']] = floatval($produto['quantidade']);
+        $valoresUnitarios[$produto['id_produto_sistema']] = floatval($produto['valor_unitario'] ?? 0);
     }
 }
 if (empty($itensValidos)) {
@@ -126,8 +127,14 @@ try {
 
     // 3. Adicionar Itens à Movimentação
     $movimentacaoItemModel = new MovimentacaoItem();
-    if (!$movimentacaoItemModel->adicionarItens($movimentacaoId, $itensValidos)) {
+    if (!$movimentacaoItemModel->adicionarItens($movimentacaoId, $itensValidos, $valoresUnitarios)) {
         throw new Exception('Erro ao registrar itens da movimentação.');
+    }
+
+    // 3.1 Adicioanar o valor total da movimentação
+    $notaValorTotal = floatval($notaValorTotal);
+    if (!$movimentacaoModel->atualizarValorTotal($movimentacaoId, $notaValorTotal, $notaNumero)) {
+        throw new Exception('Erro ao atualizar valor total da movimentação.');
     }
 
     // Inicia transação

@@ -56,6 +56,9 @@ class AuthController extends BaseController {
                 // Sucesso - registrar log
                 logMessage("Login realizado com sucesso: {$userData['usuario']}", 'INFO', 'auth.log');
                 
+                $userModel = $this->userModel; 
+                $userModel->logAudit('LOGIN', $userData['id'], null, null);
+
                 Session::login($userData);
                 header('Location: dashboard.php');
                 exit();
@@ -84,6 +87,11 @@ class AuthController extends BaseController {
         $userName = Session::getUserName();
         
         Session::logout();
+
+        $userId = Session::getUserId(); // Assuma que existe; se não, adicione em Session.php
+        $userModel = $this->userModel;
+        $userModel->logAudit('LOGOUT', $userId, null, null);
+
         Session::setFlash('success', 'Você foi desconectado com sucesso.');
         
         // Registrar logout
